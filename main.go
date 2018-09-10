@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os/exec"
 )
 
 var (
@@ -40,9 +41,14 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "POST done")
 		fmt.Println(webhook.PushData.Tag)
 		fmt.Println(webhook.Repository.Name)
-		//		cmdStr := "docker run -v ~/exp/a.out:/a.out ubuntu:14.04 /a.out -m 10m"
-		//		out, _ := exec.Command("/bin/sh", "-c", cmdStr).Output()
-		//		fmt.Printf("%s", out)
+		imageName := fmt.Sprintf("%s:%s", webhook.Repository.Name, webhook.PushData.Tag)
+		fmt.Println(imageName)
+		cmdStr := "docker start 02706e32a7e9"
+		out, err := exec.Command("/bin/sh", "-c", cmdStr).Output()
+		if err != nil {
+			fmt.Println("error!")
+		}
+		fmt.Println(out)
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
