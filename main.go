@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	flagPort = flag.String("port", "8082", "Port to listen on")
+	flagPort = flag.String("port", "8083", "Port to listen on")
 )
 
 type WebhookCallback struct {
