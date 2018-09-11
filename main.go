@@ -43,8 +43,8 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(webhook.Repository.Name)
 		imageName := fmt.Sprintf("%s:%s", webhook.Repository.Name, webhook.PushData.Tag)
 		fmt.Println(imageName)
-		cmdStr := "docker start 02706e32a7e9"
-		out, err := exec.Command("/bin/sh", "-c", cmdStr).Output()
+		cmdStr := fmt.Sprintf("docker_update.sh %s %s", webhook.Repository.Name, webhook.PushData.Tag)
+		out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 		if err != nil {
 			fmt.Println("error!")
 		}
