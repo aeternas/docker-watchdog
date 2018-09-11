@@ -29,27 +29,27 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		var webhook WebhookCallback
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			fmt.Println("error readall")
+			log.Println("error readall")
 		}
 		if err := json.Unmarshal(body, &webhook); err != nil {
-			fmt.Printf("There was an error encoding the json. err = %s", err)
+			log.Printf("There was an error encoding the json. err = %s", err)
 		}
 		if err != nil {
 			http.Error(w, "Error reading request body",
 				http.StatusInternalServerError)
 		}
 		fmt.Fprint(w, "POST done")
-		fmt.Println(webhook.PushData.Tag)
-		fmt.Println(webhook.Repository.RepoName)
+		log.Println(webhook.PushData.Tag)
+		log.Println(webhook.Repository.RepoName)
 		imageName := fmt.Sprintf("%s:%s", webhook.Repository.RepoName, webhook.PushData.Tag)
-		fmt.Println(imageName)
+		log.Println(imageName)
 		cmdStr := fmt.Sprintf("./docker_update.sh %s %s", webhook.Repository.RepoName, webhook.PushData.Tag)
-		fmt.Println(cmdStr)
+		log.Println(cmdStr)
 		out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 		if err != nil {
-			fmt.Println("error!")
+			log.Println("error!")
 		}
-		fmt.Println(out)
+		log.Println(out)
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
