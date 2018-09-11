@@ -20,7 +20,6 @@ type WebhookCallback struct {
 	} `json:"push_data"`
 
 	Repository struct {
-		Name     string `json:"name"`
 		RepoName string `json:"repo_name"`
 	} `json:"repository"`
 }
