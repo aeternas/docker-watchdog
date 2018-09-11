@@ -5,7 +5,7 @@ PORTS_PAIR=""
 
 if [[ $2 == "master" ]]; then
 	PORTS_PAIR="80:8080"
-elif
+else
 	PORTS_PAIR="8080:8080"
 fi
 
