@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"time"
 )
 
 var (
@@ -48,11 +50,37 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 		if err != nil {
 			log.Println("error!")
+		} else {
+			confirmDeployment()
 		}
 		log.Println(out)
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
+}
+
+func confirmDeployment() {
+	url := "https://hooks.slack.com/services/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"
+	fmt.Println("URL:>", url)
+
+	var jsonStr = []byte(`{"text":"Application has been succesfully deployed"}`)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+
+	if err != nil {
+		panic(err)
+	}
+	client := &http.Client{}
+	client.Timeout = time.Second * 15
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	log.Println(body)
 }
 
 func init() {
