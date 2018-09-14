@@ -64,6 +64,7 @@ func confirmDeployment(w WebhookCallback) {
 	fmt.Println("URL:>", url)
 
 	text := fmt.Sprintf(`{"text":"Application has been succesfully deployed: "%s:%s"}`, w.Repository.RepoName, w.PushData.Tag)
+	log.Println(text)
 	var jsonStr = []byte(text)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 
