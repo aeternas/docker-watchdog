@@ -64,6 +64,9 @@ func confirmDeployment() {
 	var jsonStr = []byte(`{"text":"Application has been succesfully deployed"}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 
+	if err != nil {
+		panic(err)
+	}
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
