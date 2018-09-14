@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -68,6 +69,7 @@ func confirmDeployment() {
 		panic(err)
 	}
 	client := &http.Client{}
+	client.Timeout = time.Second * 15
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
