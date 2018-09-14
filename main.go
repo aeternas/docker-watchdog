@@ -51,7 +51,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println("error!")
 		} else {
-			confirmDeployment()
+			confirmDeployment(webhook)
 		}
 		log.Println(out)
 	} else {
@@ -59,11 +59,12 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func confirmDeployment() {
+func confirmDeployment(w WebhookCallback) {
 	url := "https://hooks.slack.com/services/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"
 	fmt.Println("URL:>", url)
 
-	var jsonStr = []byte(`{"text":"Application has been succesfully deployed"}`)
+	text := fmt.Sprintf(`{"text":"Application has been succesfully deployed: "%s:%s"}`, w.Repository.RepoName, w.PushData.Tag)
+	var jsonStr = []byte(text)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 
 	if err != nil {
