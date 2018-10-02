@@ -1,6 +1,6 @@
 #!/bin/bash
 imageName=$1:$2
-containerName=autodeployed-$2
+containerName=autodeployed-$3-$2
 PORTS_PAIR=""
 
 if [[ $2 == "master" ]]; then
