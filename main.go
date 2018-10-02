@@ -18,10 +18,11 @@ var (
 
 type WebhookCallback struct {
 	PushData struct {
-		Tag string `json:"tag"`
+		Tag string
 	} `json:"push_data"`
 
 	Repository struct {
+		Name     string
 		RepoName string `json:"repo_name"`
 	} `json:"repository"`
 }
@@ -43,9 +44,10 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "POST done")
 		log.Println(webhook.PushData.Tag)
 		log.Println(webhook.Repository.RepoName)
+		log.Println(webhook.Repository.Name)
 		imageName := fmt.Sprintf("%s:%s", webhook.Repository.RepoName, webhook.PushData.Tag)
 		log.Println(imageName)
-		cmdStr := fmt.Sprintf("./docker_update.sh %s %s", webhook.Repository.RepoName, webhook.PushData.Tag)
+		cmdStr := fmt.Sprintf("./docker_update.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 		log.Println(cmdStr)
 		out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 		if err != nil {
