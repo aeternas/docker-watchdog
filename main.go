@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	. "github.com/aeternas/docker-watchdog/models"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,17 +17,6 @@ var (
 	flagPort = flag.String("port", "8083", "Port to listen on")
 )
 
-type WebhookCallback struct {
-	PushData struct {
-		Tag string
-	} `json:"push_data"`
-
-	Repository struct {
-		Name     string
-		RepoName string `json:"repo_name"`
-	} `json:"repository"`
-}
-
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		var webhook WebhookCallback
@@ -36,10 +26,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if err := json.Unmarshal(body, &webhook); err != nil {
 			log.Printf("There was an error encoding the json. err = %s", err)
-		}
-		if err != nil {
-			http.Error(w, "Error reading request body",
-				http.StatusInternalServerError)
+			http.Error(w, "Error reading request body", http.StatusInternalServerError)
 		}
 		fmt.Fprint(w, "POST done")
 		log.Println(webhook.PushData.Tag)
