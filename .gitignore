@@ -5,6 +5,7 @@
 *.so
 *.dylib
 env.list
+prod_env.list
 # Test binary, build with `go test -c`
 *.test
 
