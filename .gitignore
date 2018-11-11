@@ -11,3 +11,7 @@ prod_env.list
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Certificates
+server.key
+server.crt
