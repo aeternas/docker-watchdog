@@ -1,0 +1,11 @@
+{
+    "attachments": [
+        {
+            "fallback": "Application has been successfully deployed",
+            "color": "#36a64f",
+            "author_name": "Docker-Watchdog",
+            "title": "Deploy result",
+            "text": "Application has been successfully deployed"
+        }
+    ]
+}

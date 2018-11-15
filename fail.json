@@ -1,0 +1,11 @@
+{
+    "attachments": [
+        {
+            "fallback": "Failed to deploy application",
+            "color": "#ff0000",
+            "author_name": "Docker-Watchdog",
+            "title": "Deploy result",
+            "text": "Failed to deploy application"
+        }
+    ]
+}
