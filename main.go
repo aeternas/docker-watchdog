@@ -39,8 +39,11 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 		if err != nil {
 			log.Println("error!")
+			text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Failed to deploy application\",\"color\":\"#ff0000\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Failed to deploy application: %s:%s\"}]}", webhook.Repository.RepoName, webhook.PushData.Tag)
+			deploymentResult(text)
 		} else {
-			confirmDeployment(webhook)
+			text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Application has been successfully deployed\",\"color\":\"#36a64f\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Application has been successfully deployed: %s:%s\"}]}", webhook.Repository.RepoName, webhook.PushData.Tag)
+			deploymentResult(text)
 		}
 		log.Println(out)
 	} else {
@@ -48,13 +51,12 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func confirmDeployment(w WebhookCallback) {
+func deploymentResult(s string) {
 	url := "https://hooks.slack.com/services/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"
 	fmt.Println("URL:>", url)
 
-	text := fmt.Sprintf("{\"text\":\"Application has been succesfully deployed: %s:%s \"}", w.Repository.RepoName, w.PushData.Tag)
-	log.Println(text)
-	var jsonStr = []byte(text)
+	log.Println(s)
+	var jsonStr = []byte(s)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 
 	if err != nil {
