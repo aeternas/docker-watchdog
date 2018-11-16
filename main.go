@@ -52,7 +52,7 @@ func confirmDeployment(w WebhookCallback) {
 	url := "https://hooks.slack.com/services/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"
 	fmt.Println("URL:>", url)
 
-	text := fmt.Sprintf("{\"text\":\"Application has been succesfully deployed: %s:%s \"}", w.Repository.RepoName, w.PushData.Tag)
+	text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Application has been successfully deployed\",\"color\":\"#36a64f\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Application has been successfully deployed: %s:%s\"}]}", w.Repository.RepoName, w.PushData.Tag)
 	log.Println(text)
 	var jsonStr = []byte(text)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
