@@ -1,6 +1,11 @@
 version: 2
 jobs:
   build:
+    filters:
+      branches:
+        only:
+          - master
+          - development
     docker:
       - image: circleci/golang:1.11
     working_directory: /go/src/github.com/aeternas/docker-watchdog
