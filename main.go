@@ -22,13 +22,13 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		var webhook WebhookCallback
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			log.Println("error readall")
+			log.Println("error on ReadAll: ", err)
 		}
 		if err := json.Unmarshal(body, &webhook); err != nil {
 			log.Printf("There was an error encoding the json. err = %s", err)
 			http.Error(w, "Error reading request body", http.StatusInternalServerError)
 		}
-		fmt.Fprint(w, "POST done")
+		log.Println("POST done: ", w)
 		log.Println(webhook.PushData.Tag)
 		log.Println(webhook.Repository.RepoName)
 		log.Println(webhook.Repository.Name)
@@ -38,8 +38,8 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(cmdStr)
 		out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 		if err != nil {
-			log.Println("error!")
-			text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Failed to deploy application\",\"color\":\"#ff0000\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Failed to deploy application: %s:%s\"}]}", webhook.Repository.RepoName, webhook.PushData.Tag)
+			log.Println("error: ", err)
+			text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Failed to deploy application\",\"color\":\"#ff0000\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Failed to deploy application: %s:%s with error %s\"}]}", webhook.Repository.RepoName, webhook.PushData.Tag, err)
 			deploymentResult(text)
 		} else {
 			text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Application has been successfully deployed\",\"color\":\"#36a64f\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Application has been successfully deployed: %s:%s\"}]}", webhook.Repository.RepoName, webhook.PushData.Tag)
@@ -53,12 +53,11 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 
 func deploymentResult(s string) {
 	url := "https://hooks.slack.com/services/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"
-	fmt.Println("URL:>", url)
+	log.Println("URL:> ", url)
 
 	log.Println(s)
 	var jsonStr = []byte(s)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-
 	if err != nil {
 		panic(err)
 	}
@@ -70,9 +69,12 @@ func deploymentResult(s string) {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
+	log.Println("response Status:", resp.Status)
+	log.Println("response Headers:", resp.Header)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println("Erro on readAll: ", err)
+	}
 	log.Println(body)
 }
 
