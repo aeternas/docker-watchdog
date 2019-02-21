@@ -28,7 +28,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("There was an error encoding the json. err = %s", err)
 			http.Error(w, "Error reading request body", http.StatusInternalServerError)
 		}
-		log.Fprint(w, "POST done")
+		log.Println("POST done: ", w)
 		log.Println(webhook.PushData.Tag)
 		log.Println(webhook.Repository.RepoName)
 		log.Println(webhook.Repository.Name)
