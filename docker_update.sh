@@ -5,10 +5,10 @@ PORTS_PAIR=""
 ENV_FILE=""
 
 if [[ $2 == "master" ]]; then
-	PORTS_PAIR="443:8080"
+	PORTS_PAIR="8081:8080"
 	ENV_FILE="prod_env.list"
 else
-	PORTS_PAIR="8080:8080"
+	PORTS_PAIR="8079:8080"
 	ENV_FILE="env.list"
 fi
 
