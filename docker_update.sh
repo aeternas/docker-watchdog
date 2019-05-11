@@ -1,14 +1,11 @@
 #!/bin/bash
 imageName=$1:$2
 containerName=autodeployed-$3-$2
-PORTS_PAIR=""
 ENV_FILE=""
 
 if [[ $2 == "master" ]]; then
-	PORTS_PAIR="8081:8080"
 	ENV_FILE="prod_env.list"
 else
-	PORTS_PAIR="8079:8080"
 	ENV_FILE="env.list"
 fi
 
