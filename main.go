@@ -34,7 +34,12 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("Repository.Name is ", webhook.Repository.Name)
 		imageName := fmt.Sprintf("%s:%s", webhook.Repository.RepoName, webhook.PushData.Tag)
 		log.Println(imageName)
-		cmdStr := fmt.Sprintf("./docker_update.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
+		var cmdStr string
+		if webhook.Repository.Name == "swadeshness-nginx" {
+			cmdStr = "./nginx_deployment.sh"
+		} else {
+			cmdStr = fmt.Sprintf("./docker_update.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
+		}
 		log.Println(cmdStr)
 		out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 		if err != nil {
