@@ -29,9 +29,9 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error reading request body", http.StatusInternalServerError)
 		}
 		log.Println("POST done: ", w)
-		log.Println(webhook.PushData.Tag)
-		log.Println(webhook.Repository.RepoName)
-		log.Println(webhook.Repository.Name)
+		log.Println("TAG is ", webhook.PushData.Tag)
+		log.Println("RepoName is ", webhook.Repository.RepoName)
+		log.Println("Repository.Name is ", webhook.Repository.Name)
 		imageName := fmt.Sprintf("%s:%s", webhook.Repository.RepoName, webhook.PushData.Tag)
 		log.Println(imageName)
 		cmdStr := fmt.Sprintf("./docker_update.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
