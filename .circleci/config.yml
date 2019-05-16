@@ -1,6 +1,15 @@
 aliases:
   - &docker_worker
     - image: circleci/golang:1.11
+  - &install_deps
+    name: Installing dependencies
+    command: go get -v -t -d ./...
+  - &lint
+    name: Linting
+    command: go install ./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint && golangci-lint run
+  - &test
+    name: Run Unit Tests 
+    command: go test -v ./...
 version: 2
 jobs:
   build:
@@ -13,10 +22,6 @@ jobs:
     working_directory: /go/src/github.com/aeternas/docker-watchdog
     steps:
       - checkout
-      - run:
-          name: Installing dependencies
-          command: go get -v -t -d ./...
-      - run:
-          name: linting
-          command: go install ./vendor/github.com/golangci/golangci-lint/cmd/golangci-lint && golangci-lint run
-      - run: go test -v ./...
+      - run: *install_deps
+      - run: *lint
+      - run: *test
