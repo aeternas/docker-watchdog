@@ -1,3 +1,7 @@
+aliases:
+  - &docker_worker
+    docker:
+      - image: circleci/golang:1.11
 version: 2
 jobs:
   build:
@@ -6,8 +10,7 @@ jobs:
         only:
           - master
           - development
-    docker:
-      - image: circleci/golang:1.11
+    *docker_worker
     working_directory: /go/src/github.com/aeternas/docker-watchdog
     steps:
       - checkout
