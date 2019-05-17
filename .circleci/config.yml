@@ -25,3 +25,8 @@ jobs:
       - run: *install_deps
       - run: *lint
       - run: *test
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
