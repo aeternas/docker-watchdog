@@ -37,6 +37,8 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		var cmdStr string
 		if webhook.Repository.Name == "swadeshness-nginx" {
 			cmdStr = "./nginx_deployment.sh"
+		} else if webhook.Repository.Name == "swadeshness-spring" {
+			cmdStr = fmt.Sprintf("./spring_deployment.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 		} else {
 			cmdStr = fmt.Sprintf("./docker_update.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 		}
