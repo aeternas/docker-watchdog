@@ -36,7 +36,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(imageName)
 		var cmdStr string
 		if webhook.Repository.Name == "swadeshness-nginx" {
-			cmdStr = "./nginx_deployment.sh"
+			cmdStr = fmt.Sprintf("./nginx_deployment.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 		} else if webhook.Repository.Name == "swadeshness-spring" {
 			cmdStr = fmt.Sprintf("./spring_deployment.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 		} else {
