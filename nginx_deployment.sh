@@ -10,4 +10,4 @@ else
 fi
 
 docker stop $containerName && docker rm -f $containerName && docker rmi $imageName
-docker run -v swadeshness-certs:/etc/nginx/certs/ $PORTS_PAIR -h --restart=always --name $containerName --network swadeshness $imageName
+docker run -v swadeshness-certs:/etc/nginx/certs/ $PORTS_PAIR --restart=always --name $containerName --network swadeshness $imageName
