@@ -9,8 +9,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"time"
+)
+
+const (
+	SLACK_WEBHOOK_KEY = "SLACK_WEBHOOK"
 )
 
 var (
@@ -59,7 +64,11 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deploymentResult(s string) {
-	url := "https://hooks.slack.com/services/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"
+	var slackKey string
+	if value, ok := os.LookupEnv(SLACK_WEBHOOK_KEY); ok {
+		slackKey = value
+	}
+	url := fmt.Sprintf("https://hooks.slack.com/services/%s", slackKey)
 	log.Println("URL:> ", url)
 
 	log.Println(s)
