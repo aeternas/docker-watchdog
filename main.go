@@ -52,7 +52,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.Unmarshal(body, &webhook); err != nil {
 		log.Printf("There was an error encoding the json. err = %s", err)
-		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		http.Error(w, "Error reading request body", http.StatusBadRequest)
 	}
 	log.Println("POST done: ", w)
 	log.Println("TAG is ", webhook.PushData.Tag)
