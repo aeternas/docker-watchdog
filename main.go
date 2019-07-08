@@ -22,6 +22,25 @@ var (
 	flagPort = flag.String("port", "8083", "Port to listen on")
 )
 
+func init() {
+	log.SetFlags(log.Lmicroseconds | log.Lshortfile)
+	flag.Parse()
+}
+
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/post", PostHandler)
+
+	log.Printf("listening on port %s", *flagPort)
+	log.Fatal(http.ListenAndServe(":"+*flagPort, mux))
+
+	go func() {
+		for {
+			time.Sleep(5 * time.Second)
+		}
+	}()
+}
+
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -33,7 +52,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.Unmarshal(body, &webhook); err != nil {
 		log.Printf("There was an error encoding the json. err = %s", err)
-		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		http.Error(w, "Error reading request body", http.StatusBadRequest)
 	}
 	log.Println("POST done: ", w)
 	log.Println("TAG is ", webhook.PushData.Tag)
@@ -52,7 +71,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(cmdStr)
 	out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 	if err != nil {
-		log.Println("error: ", err)
+		log.Println("Deploy script execution error: ", err)
 		text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Failed to deploy application\",\"color\":\"#ff0000\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Failed to deploy application: %s:%s with error %s\"}]}", webhook.Repository.RepoName, webhook.PushData.Tag, err)
 		deploymentResult(text)
 	} else {
@@ -91,23 +110,4 @@ func deploymentResult(s string) {
 		log.Println("Erro on readAll: ", err)
 	}
 	log.Println(body)
-}
-
-func init() {
-	log.SetFlags(log.Lmicroseconds | log.Lshortfile)
-	flag.Parse()
-}
-
-func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/post", PostHandler)
-
-	log.Printf("listening on port %s", *flagPort)
-	log.Fatal(http.ListenAndServe(":"+*flagPort, mux))
-
-	go func() {
-		for {
-			time.Sleep(5 * time.Second)
-		}
-	}()
 }
