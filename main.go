@@ -22,6 +22,25 @@ var (
 	flagPort = flag.String("port", "8083", "Port to listen on")
 )
 
+func init() {
+	log.SetFlags(log.Lmicroseconds | log.Lshortfile)
+	flag.Parse()
+}
+
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/post", PostHandler)
+
+	log.Printf("listening on port %s", *flagPort)
+	log.Fatal(http.ListenAndServe(":"+*flagPort, mux))
+
+	go func() {
+		for {
+			time.Sleep(5 * time.Second)
+		}
+	}()
+}
+
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -91,23 +110,4 @@ func deploymentResult(s string) {
 		log.Println("Erro on readAll: ", err)
 	}
 	log.Println(body)
-}
-
-func init() {
-	log.SetFlags(log.Lmicroseconds | log.Lshortfile)
-	flag.Parse()
-}
-
-func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/post", PostHandler)
-
-	log.Printf("listening on port %s", *flagPort)
-	log.Fatal(http.ListenAndServe(":"+*flagPort, mux))
-
-	go func() {
-		for {
-			time.Sleep(5 * time.Second)
-		}
-	}()
 }
