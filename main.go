@@ -33,12 +33,6 @@ func main() {
 
 	log.Printf("listening on port %s", *flagPort)
 	log.Fatal(http.ListenAndServe(":"+*flagPort, mux))
-
-	go func() {
-		for {
-			time.Sleep(5 * time.Second)
-		}
-	}()
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
