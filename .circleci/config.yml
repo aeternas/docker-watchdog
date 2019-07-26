@@ -10,14 +10,9 @@ aliases:
   - &test
     name: Run Unit Tests 
     command: go test -v ./...
-version: 2
+version: 2.1
 jobs:
   build:
-    filters:
-      branches:
-        only:
-          - master
-          - development
     docker: *docker_worker
     working_directory: /go/src/github.com/aeternas/docker-watchdog
     steps:
@@ -26,7 +21,12 @@ jobs:
       - run: *lint
       - run: *test
 workflows:
-  version: 2
+  version: 2.1
   build:
     jobs:
       - build
+          filters:
+            branches:
+              only:
+                - master
+                - development
