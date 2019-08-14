@@ -1,6 +1,6 @@
 aliases:
   - &docker_worker
-    - image: circleci/golang:1.12
+    - image: circleci/golang
   - &install_deps
     name: Installing dependencies
     command: go get -v -t -d ./...
