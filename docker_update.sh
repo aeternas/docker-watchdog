@@ -3,7 +3,9 @@ imageName=$1:$2
 containerName=autodeployed-$3-$2
 ENV_FILE=""
 
-if [[ $2 != "master" ]] && [[ $2 != "development" ]]; then exit 0; fi
+if [[ $2 != "master" ]] && [[ $2 != "development" ]]; then
+  exit 0
+fi
 
 if [[ $2 == "master" ]]; then
 	ENV_FILE="prod_env.list"
