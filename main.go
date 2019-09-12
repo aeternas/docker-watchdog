@@ -55,6 +55,11 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	imageName := fmt.Sprintf("%s:%s", webhook.Repository.RepoName, webhook.PushData.Tag)
 	log.Println(imageName)
 	var cmdStr string
+	if webhook.PushData.Tag != "master" && webhook.PushData.Tag != "development" {
+		log.Println("Tag is not master or development")
+		http.Error(w, "Tag is not master or development", http.StatusBadRequest)
+		return
+	}
 	if webhook.Repository.Name == "swadeshness-nginx" {
 		cmdStr = fmt.Sprintf("./nginx_deployment.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 	} else if webhook.Repository.Name == "swadeshness-spring" {
