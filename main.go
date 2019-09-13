@@ -65,7 +65,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	} else if webhook.Repository.Name == "swadeshness-spring" {
 		cmdStr = fmt.Sprintf("./spring_deployment.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 	} else {
-		cmdStr = fmt.Sprintf("./docker_update.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
+		cmdStr = fmt.Sprintf("./generic_deployment.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 	}
 	log.Println(cmdStr)
 	out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
