@@ -3,10 +3,6 @@ imageName=$1:$2
 containerName=autodeployed-$3-$2
 PORTS_PAIR=""
 
-if [[ $2 != "master" ]] && [[ $2 != "development" ]]; then
-  exit 0
-fi
-
 if [[ $2 == "master" ]]; then
   PORTS_PAIR="-p 443:443 -p 8086:8086"
 else
