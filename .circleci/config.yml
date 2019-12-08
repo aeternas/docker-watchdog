@@ -4,7 +4,7 @@ aliases:
     command: |
       mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       git clone --depth 1 -b $CIRCLE_BRANCH $CIRCLE_REPOSITORY_URL ./ && \
-      git checkout $CIRCLE_SHA1
+      git reset --hard $CIRCLE_SHA1
   - &docker_worker
     - image: circleci/golang:1.11
   - &install_deps
