@@ -56,8 +56,9 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(imageName)
 	var cmdStr string
 	if webhook.PushData.Tag != "master" && webhook.PushData.Tag != "development" {
-		log.Println("Tag is not master or development")
-		http.Error(w, "Tag is not master or development", http.StatusBadRequest)
+		errString := "Tag isn't `master` of `development`, artifact wouldn't be deployed"
+		log.Println(errString)
+		http.Error(w, errString, http.StatusBadRequest)
 		return
 	}
 	if webhook.Repository.Name == "swadeshness-nginx" {
