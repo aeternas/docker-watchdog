@@ -55,6 +55,10 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	imageName := fmt.Sprintf("%s:%s", webhook.Repository.RepoName, webhook.PushData.Tag)
 	log.Println(imageName)
 	var cmdStr string
+	if webhook.PushData.Tag == "latest" {
+		log.Println("Tag is `latest`, assuming `master` should be used")
+		webhook.PushData.Tag = "master"
+	}
 	if webhook.PushData.Tag != "master" && webhook.PushData.Tag != "development" {
 		errString := "Tag isn't `master` of `development`, artifact wouldn't be deployed"
 		log.Println(errString)
