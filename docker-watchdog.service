@@ -1,0 +1,9 @@
+[Unit]
+Description=Docker containers deployment service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+ExecStart=~ivan/work/src/github.com/aeternas/docker-watchdog
