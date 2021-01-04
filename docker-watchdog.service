@@ -6,4 +6,4 @@ After=docker.service
 [Service]
 Type=simple
 RemainAfterExit=yes
-ExecStart=~ivan/work/src/github.com/aeternas/docker-watchdog
+ExecStart=/home/ivan/work/src/github.com/aeternas/docker-watchdog
