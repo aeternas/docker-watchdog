@@ -73,7 +73,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		cmdStr = fmt.Sprintf("./generic_deployment.sh %s %s %s", webhook.Repository.RepoName, webhook.PushData.Tag, webhook.Repository.Name)
 	}
 	log.Println(cmdStr)
-	out, err := exec.Command("sh", "-c", cmdStr).Output()
+	out, err := exec.Command("/bin/bash", "-c", cmdStr).Output()
 	if err != nil {
 		log.Println("Deploy script execution error: ", err)
 		text := fmt.Sprintf("{\"attachments\":[{\"fallback\":\"Failed to deploy application\",\"color\":\"#ff0000\",\"author_name\":\"Docker-Watchdog\",\"title\":\"Deploy result\",\"text\":\"Failed to deploy application: %s:%s with error %s\"}]}", webhook.Repository.RepoName, webhook.PushData.Tag, err)
